@@ -19,14 +19,14 @@
 @property CGPoint start;
 @property BOOL visiablity;
 
--(Stick*) initWithPointInView:(CGPoint)point :(UIView *)aView;
--(void) increaseLength;
--(void) stopIncreaseLength;
--(void) fallDown;
--(void) disappear;
--(void) switchIncreaseStatus;
--(CGFloat) length;
--(CGPoint) start;
--(void) destory;
+- (Stick *)initWithPointInView:(CGPoint)point :(UIView *)aView;
+- (void)increaseLength;
+- (void)stopIncreaseLength;
+- (void)fallDown;
+- (void)disappear;
+- (void)switchIncreaseStatus;
+- (CGFloat)length;
+- (CGPoint)start;
+- (void)destory;
 
 @end

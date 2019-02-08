@@ -11,8 +11,8 @@
 @implementation StageBlock
 @synthesize isMoving;
 
--(StageBlock*) initWithPositionInView:(CGPoint)point :(UIView *)aView{
-    start = point;  //左上角点
+- (StageBlock *)initWithPositionInView:(CGPoint)point :(UIView *)aView {
+    start = point;
     width = (CGFloat)(arc4random()%100 + 10);
     stageView = [[UIView alloc] initWithFrame:CGRectMake(start.x, start.y, width, point.y/2.0)];
     stageView.backgroundColor = [UIColor blackColor];
@@ -21,35 +21,32 @@
     return self;
 }
 
--(void) move:(CGFloat) distance{
+- (void)move:(CGFloat) distance {
     isMoving = YES;
-    [UIView animateWithDuration:1 //时长
-                          delay:0.00 //延迟时间
-                        options:UIViewAnimationOptionTransitionFlipFromRight//动画效果
+    [UIView animateWithDuration:1
+                          delay:0.00
+                        options:UIViewAnimationOptionTransitionFlipFromRight
                      animations:^{
-                         //动画设置区域
                          start.x -= distance;
                          stageView.frame=CGRectMake(start.x ,start.y, width, stageView.frame.size.height);
-                         
-                     } completion:^(BOOL finish){
+                     } completion:^(BOOL finish) {
                          isMoving = NO;
                      }];
 
 }
 
--(CGPoint) start{
+- (CGPoint)start {
     return start;
 }
--(CGFloat) width{
+- (CGFloat)width {
     return width;
 }
 
--(void) resetWidth:(StageBlock*)stage{
-    //start = [stage start];
+- (void)resetWidth:(StageBlock*)stage {
     stageView.frame = CGRectMake(start.x, start.y, [stage width], stageView.frame.size.height);
 }
 
--(void) destory{
+- (void)destory {
     [stageView removeFromSuperview];
 }
 @end
