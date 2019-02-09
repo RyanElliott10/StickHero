@@ -22,7 +22,6 @@
     NSString* path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
     NSMutableDictionary* dict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
     best = [[dict objectForKey:@"bestScore"] intValue];
-    NSLog(@"bestScore %d",best);
     
     help = [[UILabel alloc] initWithFrame:CGRectMake(0, height*0.1, width, height*0.1)];
     help.text = @"Press and hold to play";
@@ -78,7 +77,6 @@
 #pragma -mark touches
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"touchesBegan");
     touchBeginTime = [self getCurrentMillisecond];
     [stick increaseLength];
 }
@@ -103,67 +101,77 @@
 }
 
 - (void)updateUI {
-    StageBlock *stage3;
     [stick fallDown];
-    [stick disappear];
     [hero goForwardFrom:stage1 :stage2 :[stick length]+[stage1 width]-([hero center].x-[stage1 start].x) :width-[hero center].x];
+    
     while(hero.isWalking) {
-        NSLog(@"hero walking... ");
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
-    if (hero.isAlive) {
-        score ++;
-        myScore.text = [NSString stringWithFormat:@"%d",score];
-        CGFloat distance = [stage2 start].x - [stage1 start].x;
-        CGFloat randomWidth = (CGFloat)(arc4random()%200);
+    
+    hero.isAlive ? [self updateWithHeroAlive] : [self updateWithHeroDead];
+}
+
+- (void)updateWithHeroAlive {
+    CGFloat distance = [stage2 start].x - [stage1 start].x;
+    CGFloat randomWidth = (CGFloat)(arc4random() % 200);
+    StageBlock *stage3 = [[StageBlock alloc] initWithPositionInView:CGPointMake(width+randomWidth, height*2/3.0) :self.view];
+    score++;
+    myScore.text = [NSString stringWithFormat:@"%d",score];
+    
+    while (([stage3 start].x - distance > width) || ([stage3 start].x+[stage3 width] > width+distance)
+           || ([stage3 start].x - [stage2 start].x < 0.1 * width)) {
+        randomWidth = (CGFloat)(arc4random() % 200);
         stage3 = [[StageBlock alloc] initWithPositionInView:CGPointMake(width+randomWidth, height*2/3.0) :self.view];
-        while ([stage3 start].x-distance>width||[stage3 start].x+[stage3 width]>width+distance||[stage3 start].x-[stage2 start].x<0.1*width) {
-            randomWidth = (CGFloat)(arc4random()%200);
-            stage3 =nil;
-            stage3 = [[StageBlock alloc] initWithPositionInView:CGPointMake(width+randomWidth, height*2/3.0) :self.view];
-        }
-        
-        [hero go:distance];
-        [stage1 move:distance];
-        [stage2 move:distance];
-        [stage3 move:distance];
-    
-        while(stage1.isMoving) {
-            NSLog(@"view moving");
-            [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-        }
-        stage1 = nil;
-        stage1 = stage2;
-        stage2 = nil;
-        stage2 = stage3;
-        stick = nil;
-        CGPoint point = CGPointMake(width*0.1, height*2/3.0);
-        stick = [[Stick alloc] initWithPointInView:CGPointMake(point.x+[stage1 width], point.y) :self.view];
-    }
-    else {
-        curScore.text = [NSString stringWithFormat:@"%d",score];
-        if (score > best) {
-            best = score ;
-            bestScore.text = [NSString stringWithFormat:@"%d",best];
-            NSString* path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
-            NSMutableDictionary* dict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-            [dict setObject:[NSString stringWithFormat:@"%d",best] forKey:@"bestScore"];
-            [dict writeToFile:path atomically:YES];
-        }
-        
-        score = 0;
-        [self.view addSubview:curScore];
-        [self.view addSubview:curScoreLabel];
-        [self.view addSubview:bestScoreLabel];
-        [self.view addSubview:bestScore];
-        [self.view addSubview:restart];
-        [myScore removeFromSuperview];
-        [myScore_ removeFromSuperview];
     }
     
+    [hero go:distance];
+    [stage1 move:distance];
+    [stage2 move:distance];
+    [stage3 move:distance];
+    [stick disappear];
+    
+    while(stage1.isMoving) {
+        [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
+    
+    stage1 = stage2;
+    stage2 = stage3;
+    CGPoint point = CGPointMake(width*0.1, height*2/3.0);
+    stick = [[Stick alloc] initWithPointInView:CGPointMake(point.x+[stage1 width], point.y) :self.view];
+}
+
+- (void)updateWithHeroDead {
+    curScore.text = [NSString stringWithFormat:@"%d",score];
+    if (score > best) {
+        best = score;
+        bestScore.text = [NSString stringWithFormat:@"%d",best];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
+        [dict setObject:[NSString stringWithFormat:@"%d",best] forKey:@"bestScore"];
+        [dict writeToFile:path atomically:YES];
+    }
+    
+    [self.view addSubview:curScore];
+    [self.view addSubview:curScoreLabel];
+    [self.view addSubview:bestScoreLabel];
+    [self.view addSubview:bestScore];
+    [self.view addSubview:restart];
+    [myScore removeFromSuperview];
+    [myScore_ removeFromSuperview];
+    score = 0;
 }
 
 - (void)restartGame:(id)sender {
+    [self destroyAll];
+    [self removeAllFromSuperview];
+    
+    [self initUI];
+    myScore.text = [NSString stringWithFormat:@"%d",score];
+    [self.view addSubview:myScore_];
+    [self.view addSubview:myScore];
+}
+
+- (void)destroyAll {
     [stick destory];
     [stage1 destory];
     [stage2 destory];
@@ -172,10 +180,9 @@
     stage1 = nil;
     stage2 = nil;
     hero = nil;
-    [self initUI];
-    myScore.text = [NSString stringWithFormat:@"%d",score];
-    [self.view addSubview:myScore_];
-    [self.view addSubview:myScore];
+}
+
+- (void)removeAllFromSuperview {
     [curScore removeFromSuperview];
     [curScoreLabel removeFromSuperview];
     [bestScore removeFromSuperview];

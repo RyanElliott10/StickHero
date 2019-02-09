@@ -24,7 +24,7 @@
     return self;
 }
 
-- (void)goForwardFrom:(StageBlock*) stage1 :(StageBlock*) stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo {
+- (void)goForwardFrom:(StageBlock *) stage1 :(StageBlock *) stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo {
     NSLog(@"%f", stage1.width);
     CGFloat dist = distance > maxDistanceCanGo ? maxDistanceCanGo : distance;
     [UIView animateWithDuration:1.0
@@ -71,14 +71,12 @@
                          heroView.frame=CGRectMake(position.x, position.y, heroView.frame.size.width, heroView.frame.size.height);
                      } completion:^(BOOL finish){
                          isWalking = NO;
-                         NSLog(@"go finish");
                      }
      ];
 
 }
 
 - (void)fall{
-    NSLog(@"hero falls");
     [UIView animateWithDuration:0.5
                           delay:0.0
                         options:UIViewAnimationOptionTransitionFlipFromTop

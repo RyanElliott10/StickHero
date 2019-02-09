@@ -32,10 +32,10 @@
                             options:UIViewAnimationOptionTransitionFlipFromLeft
                          animations:^{
                              stickView.frame=CGRectMake(start.x, start.y, 2, length);
-                             
                          } completion:^(BOOL finish) {
                              [self increaseLength];
-        }];
+                         }
+        ];
     }
     stickView.layer.anchorPoint = CGPointMake(0,1);
     return;
@@ -46,8 +46,6 @@
 }
 
 - (void)fallDown {
-    NSLog(@"stick falls down");
-    
     CABasicAnimation* rotationAnimation= [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.toValue = [NSNumber numberWithFloat:  M_PI*0.5 ];
     [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
@@ -59,10 +57,9 @@
     [stickView.layer addAnimation:rotationAnimation forKey:@"Rotation"];
 }
 
--(void) disappear {
-    NSLog(@"stick disappear");
+- (void)disappear {
     [UIView animateWithDuration:0.0
-                          delay:2.0
+                          delay:0.0
                         options:UIViewAnimationOptionTransitionFlipFromLeft
                      animations:^{
                          stickView.frame = CGRectMake( start.x , start.y+length, 2, 0);
@@ -71,19 +68,18 @@
                          length = 0;
                         [self switchIncreaseStatus];
                          visiablity = NO;
-                         NSLog(@"remove stickView");
                      }];
 }
 
--(void) switchIncreaseStatus {
+- (void)switchIncreaseStatus {
     canIncrease = ~canIncrease;
 }
 
--(CGFloat) length {
+- (CGFloat)length {
     return length;
 }
 
--(void) destory {
+- (void)destory {
     [stickView removeFromSuperview];
 }
 @end
