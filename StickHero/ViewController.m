@@ -103,7 +103,7 @@
 #pragma -mark progress
 
 - (void)initUI {
-    CGPoint point = CGPointMake(width*0.1, height*2/3.0);
+    CGPoint point = CGPointMake(width * 0.1, height * 2 / 3.0);
     hero = [[Hero alloc] initWithPositionInView:point :self.view];
     stage1 = [[StageBlock alloc] initWithPositionInView:point :self.view];
     stick = [[Stick alloc] initWithPointInView:CGPointMake(point.x + [stage1 width], point.y) :self.view];
@@ -119,8 +119,11 @@
     [stick fallDown];
     [hero goForwardFrom:stage1
                        :stage2
-                       :[stick length] + [stage1 width] - ([hero center].x - [stage1 start].x)
-                       :width - [hero center].x];
+                       :stage2.start.x - hero.center.x
+//                       :stage2.start.x - stage1.start.x - stage1.width + stage2.width
+//                       :[stage1 width] - ([hero center].x - [stage1 start].x) + [stage2 width]
+                       :width - [hero center].x
+                       :stick.length];
     
     while(hero.isWalking) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode
@@ -137,7 +140,7 @@
     stage3 = [[StageBlock alloc] initWithPositionInView:CGPointMake(width + randomWidth, height * 2 / 3.0)
                                                        :self.view];
     score++;
-    myScore.text = [NSString stringWithFormat:@"%d",score];
+    myScore.text = [NSString stringWithFormat:@"%d", score];
     
     while (([stage3 start].x - distance > width) || ([stage3 start].x + [stage3 width] > width+distance)
            || ([stage3 start].x - [stage2 start].x < 0.1 * width)) {

@@ -24,8 +24,14 @@
     return self;
 }
 
-- (void)goForwardFrom:(StageBlock *)stage1 :(StageBlock *)stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo {
-    CGFloat dist = distance > maxDistanceCanGo ? maxDistanceCanGo : distance;
+- (void)goForwardFrom:(StageBlock *)stage1 :(StageBlock *)stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo :(CGFloat)stickLength {
+    CGFloat minLength = stage2.start.x - (stage1.start.x + stage1.width);
+    CGFloat maxLength = stage2.start.x + stage2.width - (stage1.start.x + stage1.width);
+    CGFloat dist = stickLength > maxDistanceCanGo ? maxDistanceCanGo : distance;
+    if (stickLength < minLength || stickLength > maxLength) {
+        dist = stickLength + stage1.width;
+    }
+    
     [UIView animateWithDuration:1.0
                           delay:1.0
                         options:UIViewAnimationOptionTransitionFlipFromLeft
@@ -36,19 +42,10 @@
                          heroView.frame=CGRectMake(position.x, position.y, heroView.frame.size.width, heroView.frame.size.height);
                      } completion:^(BOOL finish) {
                          isWalking = NO;
-                         if (center.x < [stage1 start].x + [stage1 width]) {
-                             isAlive = NO;
-                         } else if (center.x < [stage2 start].x) {
-                             [self fall];
-                             isAlive = NO;
-                         } else if (center.x < [stage2 start].x + [stage2 width]) {
-                         } else if (center.x < maxDistanceCanGo) {
+                         if (stickLength < minLength || stickLength > maxLength) {
                              isAlive = NO;
                              [self fall];
-                         } else {
-                             isAlive = NO;
                          }
-                         position = CGPointMake(stage2.start.x + stage2.width - 60, position.y);
                          heroView.frame=CGRectMake(position.x, position.y, heroView.frame.size.width, heroView.frame.size.height);
                      }];
 }
@@ -66,7 +63,6 @@
                          isWalking = NO;
                      }
      ];
-    
 }
 
 - (void)fall {
@@ -74,8 +70,8 @@
                           delay:0.0
                         options:UIViewAnimationOptionTransitionFlipFromTop
                      animations:^{
-                         position.y += 150;
-                         center.y += 150;
+                         position.y += 500;
+                         center.y += 500;
                          heroView.frame = CGRectMake(position.x, position.y, heroView.frame.size.width, heroView.frame.size.height);
                      } completion:^(BOOL finish) {
                      }];
