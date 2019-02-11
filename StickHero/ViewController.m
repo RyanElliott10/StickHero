@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import <Skillz/Skillz.h>
 
 @interface ViewController ()
 
@@ -14,12 +15,16 @@
 
 @implementation ViewController
 
+const int TOUCHES_STARTED = 0;
+const int TOUCHES_ENDED   = 1;
+const int UPDATING_UI     = 2;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     width = self.view.frame.size.width;
     height = self.view.frame.size.height;
-    [self initUI];
+    
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Info"
                                                      ofType:@"plist"];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
@@ -102,6 +107,14 @@
 
 #pragma -mark progress
 
++ (NSInteger)getRandomNumber:(NSInteger)max {
+    if ([[Skillz skillzInstance] tournamentIsInProgress]) {
+        return [Skillz getRandomNumberWithMin:0 andMax:max];
+    } else {
+        return arc4random_uniform((uint32_t)max);
+    }
+}
+
 - (void)initUI {
     CGPoint point = CGPointMake(width * 0.1, height * 2 / 3.0);
     hero = [[Hero alloc] initWithPositionInView:point :self.view];
@@ -113,6 +126,7 @@
 }
 
 - (void)updateUI {
+    NSLog(@"Here");
     acceptingTouches = NO;
     lastState = UPDATING_UI;
     
@@ -173,32 +187,20 @@
 }
 
 - (void)updateWithHeroDead {
-    curScore.text = [NSString stringWithFormat:@"%d", score];
-    if (score > best) {
-        best = score;
-        bestScore.text = [NSString stringWithFormat:@"%d", best];
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Info"
-                                                         ofType:@"plist"];
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-        [dict setObject:[NSString stringWithFormat:@"%d", best]
-                 forKey:@"bestScore"];
-        [dict writeToFile:path atomically:YES];
-    }
-    
-    [self.view addSubview:curScore];
-    [self.view addSubview:curScoreLabel];
-    [self.view addSubview:bestScoreLabel];
-    [self.view addSubview:bestScore];
-    [self.view addSubview:restart];
-    [myScore removeFromSuperview];
-    [myScore_ removeFromSuperview];
-    score = 0;
+    NSNumber *playerScore = [NSNumber numberWithInt:score];
+    [[Skillz skillzInstance] displayTournamentResultsWithScore:playerScore withCompletion:^{
+        [stage1 destroy];
+        [stage2 destroy];
+        [stage3 destroy];
+        [prevStick destroy];
+        [stick destroy];
+        [hero destroy];
+    }];
 }
 
 - (void)restartGame:(id)sender {
     [self destroyAll];
     [self removeAllFromSuperview];
-    
     [self initUI];
     myScore.text = [NSString stringWithFormat:@"%d",score];
     [self.view addSubview:myScore_];

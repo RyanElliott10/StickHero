@@ -7,8 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import <Skillz/Skillz.h>
 
-@interface AppDelegate ()
+@interface AppDelegate () <SkillzDelegate>
 
 @end
 
@@ -17,6 +19,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[Skillz skillzInstance] initWithGameId:@"5456"
+                                forDelegate:self
+                            withEnvironment:SkillzSandbox
+                                  allowExit:NO];
+    [[Skillz skillzInstance] launchSkillz];
+    
     return YES;
 }
 
@@ -40,6 +48,24 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (ViewController *)gameViewController {
+    return (ViewController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+}
+
+#pragma mark Skillz Delegate
+
+- (SkillzOrientation)preferredSkillzInteraceOrientation {
+    return SkillzPortrait;
+}
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (void)tournamentWillBegin:(NSDictionary *)gameParameters withMatchInfo:(SKZMatchInfo *)matchInfo {
+    [[self gameViewController] initUI];
 }
 
 @end

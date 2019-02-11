@@ -11,10 +11,6 @@
 #import "Hero.h"
 #import "StageBlock.h"
 
-const int TOUCHES_STARTED = 0;
-const int TOUCHES_ENDED   = 1;
-const int UPDATING_UI     = 2;
-
 @interface ViewController : UIViewController {
     BOOL acceptingTouches;
     int lastState;
@@ -37,6 +33,8 @@ const int UPDATING_UI     = 2;
     UIButton *myScore_;
     UILabel *help;
 }
+
+- (void)initUI;
 
 
 @end
