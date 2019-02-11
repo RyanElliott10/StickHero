@@ -21,7 +21,7 @@
     return self;
 }
 
-- (void)move:(CGFloat) distance {
+- (void)move:(CGFloat)distance {
     isMoving = YES;
     [UIView animateWithDuration:1
                           delay:0.00
@@ -32,7 +32,6 @@
                      } completion:^(BOOL finish) {
                          isMoving = NO;
                      }];
-
 }
 
 - (CGPoint)start {
@@ -46,7 +45,8 @@
     stageView.frame = CGRectMake(start.x, start.y, [stage width], stageView.frame.size.height);
 }
 
-- (void)destory {
+- (void)destroy {
     [stageView removeFromSuperview];
 }
+
 @end

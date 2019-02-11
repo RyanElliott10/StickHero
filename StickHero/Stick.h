@@ -10,7 +10,6 @@
 #import <UIKit/UIKit.h>
 
 @interface Stick : NSObject{
-    
     CGFloat length;
     BOOL canIncrease;
     UIView *stickView;
@@ -18,6 +17,7 @@
 
 @property CGPoint start;
 @property BOOL visiablity;
+@property BOOL isMoving;
 
 - (Stick *)initWithPointInView:(CGPoint)point :(UIView *)aView;
 - (void)increaseLength;
@@ -25,8 +25,9 @@
 - (void)fallDown;
 - (void)disappear;
 - (void)switchIncreaseStatus;
+- (void)move:(CGFloat)distance;
 - (CGFloat)length;
 - (CGPoint)start;
-- (void)destory;
+- (void)destroy;
 
 @end

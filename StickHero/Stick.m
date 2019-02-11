@@ -11,6 +11,7 @@
 @implementation Stick
 @synthesize start;
 @synthesize visiablity;
+@synthesize isMoving;
 
 - (Stick *)initWithPointInView:(CGPoint)point :(UIView *) aView{
     start = point;
@@ -18,7 +19,7 @@
     canIncrease = YES;
     visiablity = YES;
     stickView = [[UIView alloc] initWithFrame:CGRectMake(start.x, start.y, 2, length)];
-    stickView.backgroundColor = [UIColor blackColor];
+    stickView.backgroundColor = [UIColor redColor];
     [aView addSubview:stickView];
     return self;
 }
@@ -35,7 +36,7 @@
                          } completion:^(BOOL finish) {
                              [self increaseLength];
                          }
-        ];
+         ];
     }
     stickView.layer.anchorPoint = CGPointMake(0,1);
     return;
@@ -66,8 +67,21 @@
                      } completion:^(BOOL finish) {
                          start.y = start.y+length;
                          length = 0;
-                        [self switchIncreaseStatus];
+                         [self switchIncreaseStatus];
                          visiablity = NO;
+                     }];
+}
+
+- (void)move:(CGFloat)distance {
+    isMoving = YES;
+    [UIView animateWithDuration:1
+                          delay:0.00
+                        options:UIViewAnimationOptionTransitionFlipFromRight
+                     animations:^{
+                         start.x -= distance;
+                         stickView.frame = CGRectMake(start.x, start.y, 2, stickView.frame.size.height);
+                     } completion:^(BOOL finish) {
+                         isMoving = NO;
                      }];
 }
 
@@ -79,7 +93,7 @@
     return length;
 }
 
-- (void)destory {
+- (void)destroy {
     [stickView removeFromSuperview];
 }
 @end

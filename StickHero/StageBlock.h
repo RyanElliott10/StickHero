@@ -18,9 +18,9 @@
 @property BOOL isMoving;
 
 - (StageBlock *)initWithPositionInView:(CGPoint)point :(UIView *)aView;
-- (void)move:(CGFloat) distance;
+- (void)move:(CGFloat)distance;
 - (CGPoint)start;
 - (CGFloat)width;
 - (void)resetWidth:(StageBlock*)stage;
-- (void)destory;
+- (void)destroy;
 @end
