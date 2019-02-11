@@ -119,9 +119,7 @@
     [stick fallDown];
     [hero goForwardFrom:stage1
                        :stage2
-                       :stage2.start.x - hero.center.x
-//                       :stage2.start.x - stage1.start.x - stage1.width + stage2.width
-//                       :[stage1 width] - ([hero center].x - [stage1 start].x) + [stage2 width]
+                       :stage2.start.x - hero.center.x + stage2.width - 35
                        :width - [hero center].x
                        :stick.length];
     
