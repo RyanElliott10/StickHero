@@ -117,15 +117,18 @@
     lastState = UPDATING_UI;
     
     [stick fallDown];
-    [hero goForwardFrom:stage1
-                       :stage2
-                       :stage2.start.x - hero.center.x + stage2.width - 35
-                       :width - [hero center].x
-                       :stick.length];
+    BOOL bonusPoint = [hero goForwardFrom:stage1
+                                         :stage2
+                                         :stage2.start.x - hero.center.x + stage2.width - 35
+                                         :width - [hero center].x
+                                         :stick.length];
     
     while(hero.isWalking) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode
                                 beforeDate:[NSDate distantFuture]];
+    }
+    if (bonusPoint) {
+        score++;
     }
     
     hero.isAlive ? [self updateWithHeroAlive] : [self updateWithHeroDead];
@@ -207,6 +210,7 @@
     [stick destroy];
     [stage1 destroy];
     [stage2 destroy];
+    [stage3 destroy];
     [hero destroy];
     stick = nil;
     stage1 = nil;

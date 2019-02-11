@@ -21,7 +21,7 @@
 
 - (Hero *)initWithPositionInView:(CGPoint)point :(UIView *)aView;
 - (void)go:(CGFloat)distance;
-- (void)goForwardFrom:(StageBlock *)stage1 :(StageBlock *)stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo :(CGFloat)stickLength;
+- (BOOL)goForwardFrom:(StageBlock *)stage1 :(StageBlock *)stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo :(CGFloat)stickLength;
 - (void)fall;
 - (CGPoint)center;
 - (void)destroy;

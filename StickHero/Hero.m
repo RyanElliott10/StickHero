@@ -24,12 +24,17 @@
     return self;
 }
 
-- (void)goForwardFrom:(StageBlock *)stage1 :(StageBlock *)stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo :(CGFloat)stickLength {
+- (BOOL)goForwardFrom:(StageBlock *)stage1 :(StageBlock *)stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo :(CGFloat)stickLength {
     CGFloat minLength = stage2.start.x - (stage1.start.x + stage1.width);
     CGFloat maxLength = stage2.start.x + stage2.width - (stage1.start.x + stage1.width);
     CGFloat dist = stickLength > maxDistanceCanGo ? maxDistanceCanGo : distance;
+    BOOL perfect = false;
     if (stickLength < minLength || stickLength > maxLength) {
         dist = stickLength + stage1.width;
+    }
+    if ((stickLength >= ((minLength + maxLength) / 2) - 5) && (stickLength <= ((minLength + maxLength) / 2) + 5)) {
+        // Add bonus point for "perfect" plank
+        perfect = true;
     }
     
     [UIView animateWithDuration:1.0
@@ -48,6 +53,7 @@
                          }
                          heroView.frame=CGRectMake(position.x, position.y, heroView.frame.size.width, heroView.frame.size.height);
                      }];
+    return perfect;
 }
 
 - (void)go:(CGFloat)distance {
