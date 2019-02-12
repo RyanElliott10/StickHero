@@ -141,8 +141,8 @@ const int UPDATING_UI     = 2;
                               maxDistance:width - [hero center].x
                               stickLength:stick.length];
     while(hero.isWalking) {
-        [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode
-                                beforeDate:[NSDate distantFuture]];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate distantFuture]];
     }
     
     if (bonusPoint) {
