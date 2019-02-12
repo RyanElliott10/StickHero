@@ -14,7 +14,9 @@
 @interface ViewController : UIViewController {
     BOOL acceptingTouches;
     int lastState;
+    int score;
     CGFloat width,height;
+    
     Stick *stick;
     Stick *prevStick;
     Hero *hero;
@@ -22,21 +24,13 @@
     StageBlock *stage2;
     StageBlock *stage3;
     
-    int best;
-    int score;
-    UILabel *bestScore;
-    UILabel *bestScoreLabel;
     UILabel *curScore;
-    UILabel *curScoreLabel;
-    UIButton *restart;
     UILabel *myScore;
-    UIButton *myScore_;
     UILabel *help;
+    UIButton *myScore_;
 }
 
 + (NSInteger)getRandomNumber:(NSInteger)max;
 - (void)initUI;
 
-
 @end
-

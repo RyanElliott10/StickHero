@@ -90,4 +90,5 @@
 - (void)destroy {
     [heroView removeFromSuperview];
 }
+
 @end

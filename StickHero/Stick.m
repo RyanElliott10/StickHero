@@ -96,4 +96,5 @@
 - (void)destroy {
     [stickView removeFromSuperview];
 }
+
 @end

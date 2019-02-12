@@ -11,18 +11,19 @@
 #import "StageBlock.h"
 
 @interface Hero : NSObject{
-    UIImageView *heroView;
     CGPoint center;
     CGPoint position;
+    UIImageView *heroView;
 }
 
 @property BOOL isAlive;
 @property BOOL isWalking;
 
-- (Hero *)initWithPositionInView:(CGPoint)point :(UIView *)aView;
-- (void)go:(CGFloat)distance;
-- (BOOL)goForwardFrom:(StageBlock *)stage1 to:(StageBlock *)stage2 withDistance:(CGFloat)distance maxDistance:(CGFloat)maxDistanceCanGo stickLength:(CGFloat)stickLength;
-- (void)fall;
-- (CGPoint)center;
 - (void)destroy;
+- (void)go:(CGFloat)distance;
+- (void)fall;
+- (BOOL)goForwardFrom:(StageBlock *)stage1 to:(StageBlock *)stage2 withDistance:(CGFloat)distance maxDistance:(CGFloat)maxDistanceCanGo stickLength:(CGFloat)stickLength;
+- (CGPoint)center;
+- (Hero *)initWithPositionInView:(CGPoint)point :(UIView *)aView;
+
 @end
