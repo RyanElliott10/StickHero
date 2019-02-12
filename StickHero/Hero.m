@@ -2,8 +2,8 @@
 //  Hero.m
 //  StickHero
 //
-//  Created by OurEDA on 15/5/5.
-//  Copyright (c) 2015年 com.OurEDA. All rights reserved.
+//  Forked from OurEDA on 2/7/2019.
+//  Copyright (c) 2019 Ryan Elliott. All rights reserved.
 //
 
 #import "Hero.h"
@@ -24,7 +24,7 @@
     return self;
 }
 
-- (BOOL)goForwardFrom:(StageBlock *)stage1 :(StageBlock *)stage2 :(CGFloat)distance :(CGFloat)maxDistanceCanGo :(CGFloat)stickLength {
+- (BOOL)goForwardFrom:(StageBlock *)stage1 to:(StageBlock *)stage2 withDistance:(CGFloat)distance maxDistance:(CGFloat)maxDistanceCanGo stickLength:(CGFloat)stickLength {
     CGFloat minLength = stage2.start.x - (stage1.start.x + stage1.width);
     CGFloat maxLength = stage2.start.x + stage2.width - (stage1.start.x + stage1.width);
     CGFloat dist = stickLength > maxDistanceCanGo ? maxDistanceCanGo : distance;

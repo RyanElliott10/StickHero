@@ -2,8 +2,8 @@
 //  ViewController.m
 //  StickHero
 //
-//  Created by OurEDA on 15/5/4.
-//  Copyright (c) 2015年 com.OurEDA. All rights reserved.
+//  Forked from OurEDA on 2/7/2019.
+//  Copyright (c) 2019 Ryan Elliott. All rights reserved.
 //
 
 #import "ViewController.h"
@@ -54,7 +54,7 @@ const int UPDATING_UI     = 2;
     [bestScoreLabel setTextAlignment:NSTextAlignmentCenter];
     bestScoreLabel.textColor = [UIColor whiteColor];
     
-    bestScore = [[UILabel alloc] initWithFrame:CGRectMake(width*0.55, height * 0.3, width * 0.1, width * 0.05)];
+    bestScore = [[UILabel alloc] initWithFrame:CGRectMake(width * 0.55, height * 0.3, width * 0.1, width * 0.05)];
     bestScore.text = [NSString stringWithFormat:@"%d",best];
     bestScore.textColor = [UIColor whiteColor];
     
@@ -109,7 +109,8 @@ const int UPDATING_UI     = 2;
 
 + (NSInteger)getRandomNumber:(NSInteger)max {
     if ([[Skillz skillzInstance] tournamentIsInProgress]) {
-        return [Skillz getRandomNumberWithMin:0 andMax:max];
+        return [Skillz getRandomNumberWithMin:0
+                                       andMax:max];
     } else {
         return arc4random_uniform((uint32_t)max);
     }
@@ -117,30 +118,33 @@ const int UPDATING_UI     = 2;
 
 - (void)initUI {
     CGPoint point = CGPointMake(width * 0.1, height * 2 / 3.0);
-    hero = [[Hero alloc] initWithPositionInView:point :self.view];
-    stage1 = [[StageBlock alloc] initWithPositionInView:point :self.view];
-    stick = [[Stick alloc] initWithPointInView:CGPointMake(point.x + [stage1 width], point.y) :self.view];
-    CGFloat randomWidth = (CGFloat)(arc4random() % (100) + [stage1 width] + 100);
+    hero = [[Hero alloc] initWithPositionInView:point
+                                               :self.view];
+    stage1 = [[StageBlock alloc] initWithPositionInView:point
+                                                       :self.view];
+    stick = [[Stick alloc] initWithPointInView:CGPointMake(point.x + [stage1 width], point.y)
+                                              :self.view];
+    CGFloat randomWidth = (CGFloat)([ViewController getRandomNumber:INT_MAX] % (100) + [stage1 width] + 100);
     point.x += randomWidth;
-    stage2 = [[StageBlock alloc] initWithPositionInView:point :self.view];
+    stage2 = [[StageBlock alloc] initWithPositionInView:point
+                                                       :self.view];
 }
 
 - (void)updateUI {
-    NSLog(@"Here");
     acceptingTouches = NO;
     lastState = UPDATING_UI;
     
     [stick fallDown];
     BOOL bonusPoint = [hero goForwardFrom:stage1
-                                         :stage2
-                                         :stage2.start.x - hero.center.x + stage2.width - 35
-                                         :width - [hero center].x
-                                         :stick.length];
-    
+                                       to:stage2
+                             withDistance:stage2.start.x - hero.center.x + stage2.width - 35
+                              maxDistance:width - [hero center].x
+                              stickLength:stick.length];
     while(hero.isWalking) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode
                                 beforeDate:[NSDate distantFuture]];
     }
+    
     if (bonusPoint) {
         score++;
     }
@@ -151,15 +155,14 @@ const int UPDATING_UI     = 2;
 
 - (void)updateWithHeroAlive {
     CGFloat distance = [stage2 start].x - [stage1 start].x;
-    CGFloat randomWidth = (CGFloat)(arc4random() % 200);
+    CGFloat randomWidth = (CGFloat)([ViewController getRandomNumber:INT_MAX] % 200);
     stage3 = [[StageBlock alloc] initWithPositionInView:CGPointMake(width + randomWidth, height * 2 / 3.0)
                                                        :self.view];
     score++;
     myScore.text = [NSString stringWithFormat:@"%d", score];
     
-    while (([stage3 start].x - distance > width) || ([stage3 start].x + [stage3 width] > width+distance)
-           || ([stage3 start].x - [stage2 start].x < 0.1 * width)) {
-        randomWidth = (CGFloat)(arc4random() % 200);
+    while (([stage3 start].x - distance > width) || ([stage3 start].x + [stage3 width] > width+distance) || ([stage3 start].x - [stage2 start].x < 0.1 * width)) {
+        randomWidth = (CGFloat)([ViewController getRandomNumber:INT_MAX] % 200);
         stage3 = [[StageBlock alloc] initWithPositionInView:CGPointMake(width + randomWidth, height * 2 / 3.0)
                                                            :self.view];
     }
@@ -188,14 +191,15 @@ const int UPDATING_UI     = 2;
 
 - (void)updateWithHeroDead {
     NSNumber *playerScore = [NSNumber numberWithInt:score];
-    [[Skillz skillzInstance] displayTournamentResultsWithScore:playerScore withCompletion:^{
-        [stage1 destroy];
-        [stage2 destroy];
-        [stage3 destroy];
-        [prevStick destroy];
-        [stick destroy];
-        [hero destroy];
-    }];
+    [[Skillz skillzInstance] displayTournamentResultsWithScore:playerScore
+                                                withCompletion:^{
+                                                    [stage1 destroy];
+                                                    [stage2 destroy];
+                                                    [stage3 destroy];
+                                                    [prevStick destroy];
+                                                    [stick destroy];
+                                                    [hero destroy];
+                                                }];
 }
 
 - (void)restartGame:(id)sender {

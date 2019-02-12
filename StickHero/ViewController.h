@@ -2,8 +2,8 @@
 //  ViewController.h
 //  StickHero
 //
-//  Created by OurEDA on 15/5/4.
-//  Copyright (c) 2015年 com.OurEDA. All rights reserved.
+//  Forked from OurEDA on 2/7/2019.
+//  Copyright (c) 2019 Ryan Elliott. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -34,6 +34,7 @@
     UILabel *help;
 }
 
++ (NSInteger)getRandomNumber:(NSInteger)max;
 - (void)initUI;
 
 

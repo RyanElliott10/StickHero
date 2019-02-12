@@ -2,8 +2,8 @@
 //  Stick.m
 //  StickHero
 //
-//  Created by OurEDA on 15/5/5.
-//  Copyright (c) 2015年 com.OurEDA. All rights reserved.
+//  Forked from OurEDA on 2/7/2019.
+//  Copyright (c) 2019 Ryan Elliott. All rights reserved.
 //
 
 #import "Stick.h"
@@ -38,7 +38,7 @@
                          }
          ];
     }
-    stickView.layer.anchorPoint = CGPointMake(0,1);
+    stickView.layer.anchorPoint = CGPointMake(0, 1);
     return;
 }
 
@@ -48,7 +48,7 @@
 
 - (void)fallDown {
     CABasicAnimation* rotationAnimation= [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = [NSNumber numberWithFloat:  M_PI*0.5 ];
+    rotationAnimation.toValue = [NSNumber numberWithFloat:  M_PI * 0.5 ];
     [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
     rotationAnimation.duration = 1;
     rotationAnimation.repeatCount = 1;
@@ -63,9 +63,9 @@
                           delay:0.0
                         options:UIViewAnimationOptionTransitionFlipFromLeft
                      animations:^{
-                         stickView.frame = CGRectMake( start.x , start.y+length, 2, 0);
+                         stickView.frame = CGRectMake(start.x , start.y + length, 2, 0);
                      } completion:^(BOOL finish) {
-                         start.y = start.y+length;
+                         start.y = start.y + length;
                          length = 0;
                          [self switchIncreaseStatus];
                          visiablity = NO;

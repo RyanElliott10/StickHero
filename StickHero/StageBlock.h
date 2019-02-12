@@ -2,8 +2,8 @@
 //  StageBlock.h
 //  StickHero
 //
-//  Created by OurEDA on 15/5/5.
-//  Copyright (c) 2015年 com.OurEDA. All rights reserved.
+//  Forked from OurEDA on 2/7/2019.
+//  Copyright (c) 2019 Ryan Elliott. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
